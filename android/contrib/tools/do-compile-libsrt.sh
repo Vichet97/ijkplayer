@@ -166,7 +166,7 @@ echo ""
 echo "--------------------"
 echo "[*] check libsrt env"
 echo "--------------------"
-export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
+export PATH="$FF_TOOLCHAIN_PATH/bin:$PATH"
 
 export COMMON_FF_CFG_FLAGS=
 
