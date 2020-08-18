@@ -242,7 +242,7 @@ echo "[*] check ffmpeg env"
 echo "--------------------"
 echo "--------------------${FF_TOOLCHAIN_PATH}/bin"
 echo "--------------------${FF_CROSS_PREFIX}"
-export PATH=$FF_TOOLCHAIN_PATH/bin/:$PATH
+export PATH="$FF_TOOLCHAIN_PATH/bin/:$PATH"
 #export CC="ccache ${FF_CROSS_PREFIX}-gcc"
 export AS=${FF_CROSS_PREFIX}-clang
 export CC=${FF_CROSS_PREFIX}-clang
