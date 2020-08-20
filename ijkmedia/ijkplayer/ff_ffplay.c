@@ -3104,6 +3104,24 @@ static int is_realtime(AVFormatContext *s)
     return 0;
 }
 
+    
+//static int refind audio stream
+static int refind_audio_stream(FFPlayer *ffp, AVFormatContext *ic, int stream_index) {
+    /* open the streams */
+    if (stream_index >= 0) {
+#warning 测试代码
+        //打开音频流
+        stream_component_open(ffp, stream_index);
+        av_log(NULL, AV_LOG_INFO, "打开音频流stream\n");
+    }
+    ijkmeta_set_avformat_context_l(ffp->meta, ic);
+    if (stream_index >= 0){
+        ijkmeta_set_int64_l(ffp->meta, IJKM_KEY_AUDIO_STREAM, stream_index);
+        av_log(NULL, AV_LOG_INFO, "音频原始数据初始化\n");
+    }
+    return 0;
+}
+
 /* this thread gets the stream from the disk or the network */
 static int read_thread(void *arg)
 {
@@ -3572,6 +3590,27 @@ static int read_thread(void *arg)
         }
         pkt->flags = 0;
         ret = av_read_frame(ic, pkt);
+
+        if (is->audio_stream >= 0) {
+            //之前已经发现音频信息
+        }else{
+            if (!ffp->audio_disable){
+                av_log(NULL, AV_LOG_INFO, "is->audio_stream = %d\n", is->audio_stream);
+#if 1
+                int audio_stream_idx = av_find_best_stream(ic, AVMEDIA_TYPE_AUDIO,
+                                                           st_index[AVMEDIA_TYPE_AUDIO],
+                                                           st_index[AVMEDIA_TYPE_VIDEO],
+                                                           NULL, 0);
+                if (audio_stream_idx >= 0){
+                    //之前没有发现音频信息
+                    av_log(NULL, AV_LOG_WARNING, "重要信息发现 -> 音频流\n");
+                    refind_audio_stream(ffp, ic, audio_stream_idx);
+                }
+                av_log(NULL, AV_LOG_INFO, "is->audio_stream = %d\n", is->audio_stream);
+#endif
+            }
+        }
+
         if (ret < 0) {
             int pb_eof = 0;
             int pb_error = 0;
