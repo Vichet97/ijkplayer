@@ -3109,7 +3109,6 @@ static int is_realtime(AVFormatContext *s)
 static int refind_audio_stream(FFPlayer *ffp, AVFormatContext *ic, int stream_index) {
     /* open the streams */
     if (stream_index >= 0) {
-#warning 测试代码
         //打开音频流
         stream_component_open(ffp, stream_index);
         av_log(NULL, AV_LOG_INFO, "打开音频流stream\n");
